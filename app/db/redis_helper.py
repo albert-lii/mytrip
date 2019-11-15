@@ -30,8 +30,9 @@ class RedisClient(object):
         self._client.expire(key, expire)
 
     def check_data_by_cycle(self, key: str, cycle_time: int = 20):
-        """循环检查数据，默认循环检查时间为 20s"""
-        data = self._client.get_data(key)
+        """循环检查数据，默认循环检查时间为 20s，因为 redis 的发布/订阅模式下，一条消息只能消费一次，
+        所以为了提升效率，此处不使用发布/订阅模式来检查数据"""
+        data = self.get_data(key)
         if data is None:
             # 总的循环检查时间
             total_time = cycle_time
@@ -40,7 +41,7 @@ class RedisClient(object):
             # 每隔 0.25s 去检查一次是否数据库中有值，如果循环时间结束后没有值，则返回 None
             while total_time > 0:
                 time.sleep(0.25)
-                data = self._client.get_data(key)
+                data = self.get_data(key)
                 if data is not None:
                     return data
                 else:

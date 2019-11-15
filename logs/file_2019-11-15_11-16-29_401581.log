@@ -1,0 +1,3 @@
+2019-11-15 11:16:31.405 [ INFO ] api.py:crawl_ctrip_inter_flights:84 ===>  flights-ctrip-inter-round-back-SHA-HKG-2019-11-20_2019-11-25-Y_S-香港航空-16:50-19:50
+2019-11-15 11:22:31.488 [ INFO ] api.py:crawl_ctrip_inter_flights:84 ===>  flights-ctrip-inter-round-back-SHA-HKG-2019-11-20_2019-11-25-Y_S-香港航空-16:50-19:50
+2019-11-15 11:37:12.641 [ INFO ] api.py:crawl_ctrip_inter_flights:84 ===>  flights-ctrip-inter-round-back-SHA-HKG-2019-11-20_2019-11-25-Y_S-香港航空-16:50-19:50

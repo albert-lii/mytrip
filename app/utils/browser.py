@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
-# @Time: 2019/9/20 17:24 
-# @Author: albertlii
+"""
+    :author: Albert Li
+    :time: 2019/11/13 15:45
+"""
 
 import time
 import platform
@@ -10,22 +12,28 @@ from loguru import logger
 
 
 class BrowserHelper(object):
+    def __init__(self):
+        self._browser = None
 
     def create_browser(self, proxy=None):
         """创建一个浏览器对象"""
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument('--no-sandbox')  # 解决DevToolsActivePort文件不存在报错问题
-        chrome_options.add_argument('--headless')  # 设置 chrome 浏览器为无界面模式
-        chrome_options.add_argument('--disable-gpu')  # 禁用GPU硬件加速。如果软件渲染器没有就位，则GPU进程将不会启动
-        chrome_options.add_argument('blink-settings=imagesEnabled=false')  # 禁用加载图片
-        chrome_options.add_argument('--ignore-certificate-errors')  # 忽略证书错误
+        chrome_options.add_argument("--no-sandbox")  # 解决DevToolsActivePort文件不存在报错问题
+        chrome_options.add_argument("--headless")  # 设置 chrome 浏览器为无界面模式
+        chrome_options.add_argument(
+            "--disable-gpu"
+        )  # 禁用GPU硬件加速。如果软件渲染器没有就位，则GPU进程将不会启动
+        chrome_options.add_argument("blink-settings=imagesEnabled=false")  # 禁用加载图片
+        chrome_options.add_argument("--ignore-certificate-errors")  # 忽略证书错误
         if proxy is not None:
-            chrome_options.add_argument('--proxy-server=http://%s' % proxy)  # 设置代理
+            chrome_options.add_argument("--proxy-server=http://%s" % proxy)  # 设置代理
         # 使用 selenium 创建浏览器窗口
-        if platform.system() == 'Windows':
+        if platform.system() == "Windows":
             # Windows 环境
-            executable_path = r'C:\Users\albertlii\AppData\Local\Google\Chrome\Application\chromedriver.exe'
-            self._browser = webdriver.Chrome(options=chrome_options, executable_path=executable_path)
+            executable_path = r"C:\Users\albertlii\AppData\Local\Google\Chrome\Application\chromedriver.exe"
+            self._browser = webdriver.Chrome(
+                options=chrome_options, executable_path=executable_path
+            )
         else:
             # Linux 环境
             # executable_path = r'/usr/local/bin/chromedriver',
@@ -38,8 +46,8 @@ class BrowserHelper(object):
         try:
             # 超时会抛出异常，这里 try 一下
             self._browser.get(url)
-        except Exception as e:
-            logger.error('open page failed')
+        except Exception:
+            logger.error("open page failed")
 
     def get_browser(self):
         """获取浏览器对象
@@ -51,13 +59,13 @@ class BrowserHelper(object):
         """获取滚动条距离页面顶部的高度
         :return: 滚动条距离页面顶部的高度
         """
-        js_get_scroll_height = 'return action=document.body.scrollHeight;'
+        js_get_scroll_height = "return action=document.body.scrollHeight;"
         return self._browser.execute_script(js_get_scroll_height)
 
     def scroll_to_footer(self):
         """滚动到页面最底部"""
         # 滚动到当前页面的底部的js
-        js_scroll_to_bottom = 'window.scrollTo(0, document.body.scrollHeight);'
+        js_scroll_to_bottom = "window.scrollTo(0, document.body.scrollHeight);"
         # 先获取当前的页面高度
         scroll_top = self.get_scroll_top()
         # 是否到达页面最底部的检查次数

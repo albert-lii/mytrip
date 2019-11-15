@@ -5,6 +5,6 @@
 """
 from flask import Blueprint
 
-flight_api_bp = Blueprint('flight_api', __name__)
+flight_api_bp = Blueprint("flight_api", __name__)
 
 from . import api

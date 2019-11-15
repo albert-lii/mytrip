@@ -14,8 +14,12 @@ from selenium.webdriver.support import expected_conditions as EC
 # WebDriverWait 库，负责循环等待
 from selenium.webdriver.support.wait import WebDriverWait
 
+from lxml import html
+
 from app.db.redis_helper import RedisClient
 from app.utils.browser import BrowserHelper
+
+etree = html.etree
 
 redis_client = RedisClient()
 
@@ -46,11 +50,11 @@ def _load_cookies(helper: BrowserHelper):
 
 
 def _open_inter_flight_page(
-        trip_type: int, dep_city: str, arr_city: str, date: str, cabin: str
+    trip_type: int, dep_city: str, arr_city: str, date: str, cabin: str
 ) -> BrowserHelper:
     """访问携程国际航班页面
     :param trip_type: 1: 单程  2: 往返-单程
-    :param dep_city: 起飞城市
+    :param dep_city: 出发城市
     :param arr_city: 到达城市
     :param date: 出发日期
     :param cabin: 舱型
@@ -86,10 +90,10 @@ def _open_inter_flight_page(
 
 
 def _open_inter_round_back_flight_page(
-        dep_city: str, arr_city: str, date: str, cabin: str, go_flight: dict
+    dep_city: str, arr_city: str, date: str, cabin: str, go_flight: dict
 ) -> BrowserHelper:
     """访问国际往返行航班的返程航班页面
-    :param dep_city: 起飞城市
+    :param dep_city: 出发城市
     :param arr_city: 到达城市
     :param date: 出发日期
     :param cabin: 舱型
@@ -107,20 +111,20 @@ def _open_inter_round_back_flight_page(
         airline = el.find_element_by_css_selector("div.airline-name").text
         dep_time = (
             el.find_element_by_css_selector("div.depart-box")
-                .find_element_by_css_selector("div.time")
-                .text
+            .find_element_by_css_selector("div.time")
+            .text
         )
         arr_time = (
             el.find_element_by_css_selector("div.arrive-box")
-                .find_element_by_css_selector("div.time")
-                .text
+            .find_element_by_css_selector("div.time")
+            .text
         )
         if all(
-                [
-                    go_flight.get("airline") in airline,
-                    go_flight.get("dep_time") in dep_time,
-                    go_flight.get("arr_time") in arr_time,
-                ]
+            [
+                go_flight.get("airline") in airline,
+                go_flight.get("dep_time") in dep_time,
+                go_flight.get("arr_time") in arr_time,
+            ]
         ):
             # 点击去程航班订票按钮，开始请求返程航班
             helper.scroll_to_view(el)
@@ -136,17 +140,17 @@ def _open_inter_round_back_flight_page(
 
 
 def _open_flight_order_page(
-        trip_type: int,
-        dep_city: str,
-        arr_city: str,
-        date: str,
-        cabin: str,
-        go_flight: dict,
-        back_flight: dict,
+    trip_type: int,
+    dep_city: str,
+    arr_city: str,
+    date: str,
+    cabin: str,
+    go_flight: dict,
+    back_flight: dict,
 ) -> BrowserHelper:
     """访问填写乘机人订单页面，页面出现，关闭浏览器
     :param trip_type: 1: 单程  2: 往返
-    :param dep_city: 起飞城市
+    :param dep_city: 出发城市
     :param arr_city: 到达城市
     :param date: 出发日期
     :param cabin: 舱型
@@ -165,29 +169,28 @@ def _open_flight_order_page(
     go_flight_els = helper.get_browser().find_elements_by_css_selector(
         "div.flight-item"
     )
-    is_browser_quit = False
     for go_el in go_flight_els:
         go_airline = (
             go_el.find_element_by_css_selector("div.airline-name")
-                .find_element_by_tag_name("span")
-                .text
+            .find_element_by_tag_name("span")
+            .text
         )
         go_dep_time = (
             go_el.find_element_by_css_selector("div.depart-box")
-                .find_element_by_css_selector("div.time")
-                .text
+            .find_element_by_css_selector("div.time")
+            .text
         )
         go_arr_time = (
             go_el.find_element_by_css_selector("div.arrive-box")
-                .find_element_by_css_selector("div.time")
-                .text
+            .find_element_by_css_selector("div.time")
+            .text
         )
         if all(
-                [
-                    go_flight.get("airline") in go_airline,
-                    go_flight.get("dep_time") in go_dep_time,
-                    go_flight.get("arr_time") in go_arr_time,
-                ]
+            [
+                go_flight.get("airline") in go_airline,
+                go_flight.get("dep_time") in go_dep_time,
+                go_flight.get("arr_time") in go_arr_time,
+            ]
         ):
             helper.scroll_to_view(go_el)
             if trip_type == 1:
@@ -207,10 +210,10 @@ def _open_flight_order_page(
                 )
                 # 判断登录框是否出现
                 if (
-                        helper.get_browser()
-                                .find_element_by_id("maskloginbox")
-                                .is_displayed()
-                        and login_name_input_el is not None
+                    helper.get_browser()
+                    .find_element_by_id("maskloginbox")
+                    .is_displayed()
+                    and login_name_input_el is not None
                 ):
                     login_name_input_el.send_keys("18013862580")
                     helper.get_browser().find_element_by_id("npwd").send_keys(
@@ -251,25 +254,25 @@ def _open_flight_order_page(
                 for back_el in back_flight_els:
                     back_airline = (
                         back_el.find_element_by_css_selector("div.airline-name")
-                            .find_element_by_tag_name("span")
-                            .text
+                        .find_element_by_tag_name("span")
+                        .text
                     )
                     back_dep_time = (
                         back_el.find_element_by_css_selector("div.depart-box")
-                            .find_element_by_css_selector("div.time")
-                            .text
+                        .find_element_by_css_selector("div.time")
+                        .text
                     )
                     back_arr_time = (
                         back_el.find_element_by_css_selector("div.arrive-box")
-                            .find_element_by_css_selector("div.time")
-                            .text
+                        .find_element_by_css_selector("div.time")
+                        .text
                     )
                     if all(
-                            [
-                                back_flight.get("airline") in back_airline,
-                                back_flight.get("dep_time") in back_dep_time,
-                                back_flight.get("arr_time") in back_arr_time,
-                            ]
+                        [
+                            back_flight.get("airline") in back_airline,
+                            back_flight.get("dep_time") in back_dep_time,
+                            back_flight.get("arr_time") in back_arr_time,
+                        ]
                     ):
                         helper.scroll_to_view(back_el)
                         back_seats = back_el.find_elements_by_css_selector(
@@ -288,10 +291,10 @@ def _open_flight_order_page(
                         )
                         # 判断登录框是否出现
                         if (
-                                helper.get_browser()
-                                        .find_element_by_id("maskloginbox")
-                                        .is_displayed()
-                                and login_name_input_el is not None
+                            helper.get_browser()
+                            .find_element_by_id("maskloginbox")
+                            .is_displayed()
+                            and login_name_input_el is not None
                         ):
                             login_name_input_el.send_keys("18013862580")
                             helper.get_browser().find_element_by_id("npwd").send_keys(
@@ -326,32 +329,30 @@ def _open_flight_order_page(
     return helper
 
 
-def _crawl_flights_in_page(helper: BrowserHelper):
+def _crawl_flights_in_page(helper):
     """抓取页面中的航班列表信息"""
-    flights = []
     helper.scroll_to_footer()
-    flight_els = helper.get_browser().find_elements_by_css_selector("div.flight-item")
+    html_text = (
+        helper.get_browser()
+        .find_element_by_css_selector("div.flight-list")
+        .get_attribute("innerHTML")
+    )
+    dom = etree.HTML(html_text, etree.HTMLParser())
+    flight_els = dom.xpath('//div[contains(@class,"flight-item")]')
+    flights = []
     for el in flight_els:
-        airline = el.find_element_by_css_selector("div.airline-name").text
-        dep_time = (
-            el.find_element_by_css_selector("div.depart-box")
-                .find_element_by_css_selector("div.time")
-                .text
-        )
-        arr_time = (
-            el.find_element_by_css_selector("div.arrive-box")
-                .find_element_by_css_selector("div.time")
-                .text
-        )
-        flights.append({"airline": airline, "dep_time": dep_time, "arr_time": arr_time})
+        airline = el.xpath('.//div[@class="airline-name"]/span/text()')[0]
+        from_time = el.xpath('.//div[@class="depart-box"]/div[@class="time"]/text()')[0]
+        to_time = el.xpath('.//div[@class="arrive-box"]/div[@class="time"]/text()')[0]
+        flights.append({"airline": airline, "from_time": from_time, "to_time": to_time})
     return flights
 
 
 def call_inter_oneway_flights(
-        dep_city: str, arr_city: str, date: str, cabin: str
+    dep_city: str, arr_city: str, date: str, cabin: str
 ) -> (BrowserHelper, list):
     """请求国际单程航班
-    :param dep_city: 起飞城市
+    :param dep_city: 出发城市
     :param arr_city: 到达城市
     :param date: 出发日期
     :param cabin: 舱型
@@ -361,14 +362,15 @@ def call_inter_oneway_flights(
     WebDriverWait(helper.get_browser(), 20, 0.5).until(
         EC.presence_of_element_located((By.CLASS_NAME, "flight-item"))
     )
-    return helper, _crawl_flights_in_page(helper)
+    page_flights = _crawl_flights_in_page(helper)
+    return helper, page_flights
 
 
 def call_inter_round_go_flights(
-        dep_city: str, arr_city: str, date: str, cabin: str
+    dep_city: str, arr_city: str, date: str, cabin: str
 ) -> (BrowserHelper, list):
     """请求国际往返航班中的去程航班
-    :param dep_city: 起飞城市
+    :param dep_city: 出发城市
     :param arr_city: 到达城市
     :param date: 出发日期
     :param cabin: 舱型
@@ -378,14 +380,15 @@ def call_inter_round_go_flights(
     WebDriverWait(helper.get_browser(), 20, 0.5).until(
         EC.presence_of_element_located((By.CLASS_NAME, "flight-item"))
     )
-    return helper, _crawl_flights_in_page(helper)
+    page_flights = _crawl_flights_in_page(helper)
+    return helper, page_flights
 
 
 def call_inter_round_back_flights(
-        dep_city: str, arr_city: str, date: str, cabin: str, go_flight: dict
+    dep_city: str, arr_city: str, date: str, cabin: str, go_flight: dict
 ) -> (BrowserHelper, list):
     """请求国际往返航班中的返程航班
-    :param dep_city: 起飞城市
+    :param dep_city: 出发城市
     :param arr_city: 到达城市
     :param date: 出发日期
     :param cabin: 舱型
@@ -401,4 +404,5 @@ def call_inter_round_back_flights(
     WebDriverWait(helper.get_browser(), 20, 0.5).until(
         EC.presence_of_element_located((By.CLASS_NAME, "flight-seats"))
     )
-    return helper, _crawl_flights_in_page(helper)
+    page_flights = _crawl_flights_in_page(helper)
+    return helper, page_flights

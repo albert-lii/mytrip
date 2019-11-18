@@ -19,7 +19,7 @@ class BrowserHelper(object):
         """创建一个浏览器对象"""
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--no-sandbox")  # 解决DevToolsActivePort文件不存在报错问题
-        chrome_options.add_argument("--headless")  # 设置 chrome 浏览器为无界面模式
+        #chrome_options.add_argument("--headless")  # 设置 chrome 浏览器为无界面模式
         chrome_options.add_argument(
             "--disable-gpu"
         )  # 禁用GPU硬件加速。如果软件渲染器没有就位，则GPU进程将不会启动

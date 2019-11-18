@@ -122,8 +122,8 @@ def _open_inter_round_back_flight_page(
         if all(
             [
                 go_flight.get("airline") in airline,
-                go_flight.get("dep_time") in dep_time,
-                go_flight.get("arr_time") in arr_time,
+                go_flight.get("from_time") in dep_time,
+                go_flight.get("to_time") in arr_time,
             ]
         ):
             # 点击去程航班订票按钮，开始请求返程航班
@@ -175,12 +175,12 @@ def _open_flight_order_page(
             .find_element_by_tag_name("span")
             .text
         )
-        go_dep_time = (
+        go_from_time = (
             go_el.find_element_by_css_selector("div.depart-box")
             .find_element_by_css_selector("div.time")
             .text
         )
-        go_arr_time = (
+        go_to_time = (
             go_el.find_element_by_css_selector("div.arrive-box")
             .find_element_by_css_selector("div.time")
             .text
@@ -188,8 +188,8 @@ def _open_flight_order_page(
         if all(
             [
                 go_flight.get("airline") in go_airline,
-                go_flight.get("dep_time") in go_dep_time,
-                go_flight.get("arr_time") in go_arr_time,
+                go_flight.get("dep_time") in go_from_time,
+                go_flight.get("arr_time") in go_to_time,
             ]
         ):
             helper.scroll_to_view(go_el)
@@ -296,9 +296,9 @@ def _open_flight_order_page(
                             .is_displayed()
                             and login_name_input_el is not None
                         ):
-                            login_name_input_el.send_keys("18013862580")
+                            login_name_input_el.send_keys("账号")
                             helper.get_browser().find_element_by_id("npwd").send_keys(
-                                "jmj641020"
+                                "密码"
                             )
                             btn_login = helper.get_browser().find_element_by_id(
                                 "nsubmit"
@@ -327,6 +327,7 @@ def _open_flight_order_page(
                             _save_cookies(json.dumps(ctrip_cookies))
                         return helper
     return helper
+
 
 
 def _crawl_flights_in_page(helper):

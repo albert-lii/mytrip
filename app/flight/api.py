@@ -5,7 +5,6 @@
 """
 import json
 from flask import request, jsonify
-from loguru import logger
 from app.flight import flight_api_bp, ctrip_spider
 from app.db.redis_helper import RedisClient
 from app.response.response_code import ResponseCode

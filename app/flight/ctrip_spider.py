@@ -109,12 +109,12 @@ def _open_inter_round_back_flight_page(
     flight_els = helper.get_browser().find_elements_by_css_selector("div.flight-item")
     for el in flight_els:
         airline = el.find_element_by_css_selector("div.airline-name").text
-        dep_time = (
+        from_time = (
             el.find_element_by_css_selector("div.depart-box")
             .find_element_by_css_selector("div.time")
             .text
         )
-        arr_time = (
+        to_time = (
             el.find_element_by_css_selector("div.arrive-box")
             .find_element_by_css_selector("div.time")
             .text
@@ -122,8 +122,8 @@ def _open_inter_round_back_flight_page(
         if all(
             [
                 go_flight.get("airline") in airline,
-                go_flight.get("from_time") in dep_time,
-                go_flight.get("to_time") in arr_time,
+                go_flight.get("from_time") in from_time,
+                go_flight.get("to_time") in to_time,
             ]
         ):
             # 点击去程航班订票按钮，开始请求返程航班
@@ -188,8 +188,8 @@ def _open_flight_order_page(
         if all(
             [
                 go_flight.get("airline") in go_airline,
-                go_flight.get("dep_time") in go_from_time,
-                go_flight.get("arr_time") in go_to_time,
+                go_flight.get("from_time") in go_from_time,
+                go_flight.get("to_time") in go_to_time,
             ]
         ):
             helper.scroll_to_view(go_el)
@@ -257,12 +257,12 @@ def _open_flight_order_page(
                         .find_element_by_tag_name("span")
                         .text
                     )
-                    back_dep_time = (
+                    back_from_time = (
                         back_el.find_element_by_css_selector("div.depart-box")
                         .find_element_by_css_selector("div.time")
                         .text
                     )
-                    back_arr_time = (
+                    back_to_time = (
                         back_el.find_element_by_css_selector("div.arrive-box")
                         .find_element_by_css_selector("div.time")
                         .text
@@ -270,8 +270,8 @@ def _open_flight_order_page(
                     if all(
                         [
                             back_flight.get("airline") in back_airline,
-                            back_flight.get("dep_time") in back_dep_time,
-                            back_flight.get("arr_time") in back_arr_time,
+                            back_flight.get("from_time") in back_from_time,
+                            back_flight.get("to_time") in back_to_time,
                         ]
                     ):
                         helper.scroll_to_view(back_el)

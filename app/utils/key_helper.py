@@ -14,7 +14,7 @@ def generate_ctrip_flights_key(
     cabin: str,
     goflight_airline: str = None,
     goflight_deptime: str = None,
-    goflight_arrtime: str = None,
+    goflight_arrtime: str = None
 ) -> str:
     """生成缓存携程航班数据的 key
     :param trip_type: 行程类型

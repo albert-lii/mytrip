@@ -19,7 +19,7 @@ from app.utils import key_helper
 redis_client = RedisClient()
 
 
-@flight_api_bp.route("/ctrip/list", methods=["POST"])
+@flight_api_bp.route("/ctrip", methods=["POST"])
 def fetch_ctrip_inter_flights():
     """抓取携程国际航班数据"""
     args = request.json
@@ -44,7 +44,7 @@ def fetch_ctrip_inter_flights():
         cabin,
         goflight_airline,
         goflight_deptime,
-        goflight_arrtime,
+        goflight_arrtime
     )
     print(resp)
     return jsonify(resp)
@@ -147,7 +147,7 @@ def _crawl_ctrip_inter_flights(
         cabin,
         goflight_airline,
         goflight_deptime,
-        goflight_arrtime,
+        goflight_arrtime
 ):
     if trip_type == 1:
         key = key_helper.generate_ctrip_flights_key(1, dep_city, arr_city, date, cabin)
@@ -182,7 +182,7 @@ def _crawl_ctrip_inter_flights(
                 [
                     goflight_airline is None,
                     goflight_deptime is None,
-                    goflight_arrtime is None,
+                    goflight_arrtime is None
                 ]
         ):
             return make_response_error_as_dict(
@@ -202,7 +202,7 @@ def _crawl_ctrip_inter_flights(
             cabin,
             goflight_airline,
             goflight_deptime,
-            goflight_arrtime,
+            goflight_arrtime
         )
         data = redis_client.get_data(key)
         if data is None or json.loads(data)["code"] != ResponseCode.SUCCESS.code:
@@ -213,8 +213,8 @@ def _crawl_ctrip_inter_flights(
                 cabin,
                 {
                     "airline": goflight_airline,
-                    "dep_time": goflight_deptime,
-                    "arr_time": goflight_arrtime,
+                    "from_time": goflight_deptime,
+                    "to_time": goflight_arrtime,
                 },
             )
             if all([helper is None, page_flights is None]):
@@ -224,7 +224,7 @@ def _crawl_ctrip_inter_flights(
             helper.close_all()
             return _get_flights_from_cache(key, page_flights)
         else:
-            return jsonify(json.loads(data))
+            return json.loads(data)
 
 
 def _filter_fake_flights(api_flights, page_flights) -> list:

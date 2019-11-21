@@ -87,8 +87,6 @@ def parse_inter_flights(data, trip_type) -> list:
                 # 如果是往返的去程，则只选择产品列表中的第一个产品即可
                 break
         flight = {
-            "source": "ctrip",
-            "source_desc": "携程",
             "airline": segment.get("airlineName"),  # 航空公司
             "airline_code": segment.get("airlineCode"),  # 航空公司代码
             "from_date": routes[0]["dep_date"],  # 出发日期

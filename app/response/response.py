@@ -75,9 +75,14 @@ def make_flights_response_ok_as_str(flights=None):
     return make_response_ok_as_str({"flights": flights})
 
 
-def make_flight_response_ok(flights=None):
+def make_flight_response_ok(flight=None):
     """根据航班号请求航班信息成功返回的结果"""
-    return make_response_ok({"flight": flights})
+    return make_response_ok({"flight": flight})
+
+
+def make_flight_response_ok_as_dict(flight=None):
+    """根据航班号请求航班信息成功返回的结果"""
+    return make_response_ok_as_dict({"flight": flight})
 
 
 def make_penalty_rule_response_ok(penalty_rules=None):

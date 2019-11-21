@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 """
+    redis 封装
     :author: Albert Li
     :time: 2019/11/12 17:42 
 """

@@ -13,4 +13,5 @@ def create_app():
     """
     app = Flask(__name__, template_folder="templates", static_folder="static")
     app.register_blueprint(flight_api_bp, url_prefix="/api/flight")
+    app.config["JSON_SORT_KEYS"] = False
     return app

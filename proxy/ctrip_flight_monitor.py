@@ -117,6 +117,7 @@ class CtripFlightMonitor(object):
                                 date=req_segments[0].get("departureDate"),
                                 cabin=req_data.get("cabin"),
                             )
+                            logger.info(key)
                             redis_client.set_data_with_expire(
                                 key, make_flights_response_ok_as_str(flights)
                             )

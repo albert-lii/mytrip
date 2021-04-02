@@ -24,7 +24,7 @@ kaitaistruct==0.8
 lazy-object-proxy==1.4.3
 ldap3==2.5.2
 loguru==0.3.2
-lxml==4.4.1
+lxml==4.6.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
 mitmproxy==4.0.4

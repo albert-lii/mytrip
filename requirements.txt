@@ -27,7 +27,7 @@ loguru==0.3.2
 lxml==4.6.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
-mitmproxy==4.0.4
+mitmproxy==8.0.0
 passlib==1.7.1
 pipenv==2018.11.26
 pyasn1==0.4.7
